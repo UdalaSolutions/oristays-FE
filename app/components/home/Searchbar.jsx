@@ -1,0 +1,245 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, CalendarDays, Users, MapPin, Clock } from 'lucide-react';
+
+const SUGGESTED_DESTINATIONS = [
+	{ name: 'Lekki', desc: 'Explore beach houses' },
+	{ name: 'Victoria Island', desc: 'Business & luxury stays' },
+	{ name: 'Ikoyi', desc: 'Premium apartments' },
+	{ name: 'Ikeja', desc: 'Near the airport' },
+];
+
+const GUEST_FIELDS = [
+	{ key: 'adults', label: 'Adults', desc: 'Ages 12 or older' },
+	{ key: 'children', label: 'Children', desc: 'Ages 2 to 12' },
+	{ key: 'infants', label: 'Infants', desc: 'Under 2' },
+	{ key: 'pets', label: 'Pets', desc: 'Service animal?' },
+];
+
+function useClickOutside(ref, handler) {
+	useEffect(() => {
+		function listener(e) {
+			if (!ref.current || ref.current.contains(e.target)) return;
+			handler();
+		}
+		document.addEventListener('mousedown', listener);
+		return () => document.removeEventListener('mousedown', listener);
+	}, [ref, handler]);
+}
+
+export default function SearchBar({ recent = [] }) {
+	const router = useRouter();
+	const [destination, setDestination] = useState('');
+	const [showDestinations, setShowDestinations] = useState(false);
+	const [showDates, setShowDates] = useState(false);
+	const [showGuests, setShowGuests] = useState(false);
+	const [guests, setGuests] = useState({
+		adults: 0,
+		children: 0,
+		infants: 0,
+		pets: 0,
+	});
+
+	const destRef = useRef(null);
+	const dateRef = useRef(null);
+	const guestRef = useRef(null);
+
+	useClickOutside(destRef, () => setShowDestinations(false));
+	useClickOutside(dateRef, () => setShowDates(false));
+	useClickOutside(guestRef, () => setShowGuests(false));
+
+	const totalGuests = guests.adults + guests.children;
+
+	function updateGuest(key, delta) {
+		setGuests((prev) => ({ ...prev, [key]: Math.max(0, prev[key] + delta) }));
+	}
+
+	function handleSearch() {
+		const params = new URLSearchParams();
+		if (destination) params.set('destination', destination);
+		if (totalGuests > 0) params.set('guests', totalGuests);
+		router.push(`/apartments?${params.toString()}`);
+	}
+
+	return (
+		<div className='bg-[#FAF6F0] rounded-2xl border border-primary h-18 flex items-stretch overflow-visible'>
+			<div className='flex items-stretch flex-1 divide-x divide-neutral-200 min-w-0'>
+				<div
+					ref={destRef}
+					className='relative flex-1 min-w-0'>
+					<button
+						onClick={() => {
+							setShowDestinations(true);
+							setShowDates(false);
+							setShowGuests(false);
+						}}
+						className='w-full h-full flex items-center gap-3 px-4 text-left'>
+						<Search
+							size={20}
+							className='text-neutral-400 shrink-0'
+						/>
+						<span
+							className={`text-sm truncate ${destination ? 'text-neutral-900' : 'text-neutral-400'}`}>
+							{destination || 'Search destinations'}
+						</span>
+					</button>
+
+					{showDestinations && (
+						<div className='absolute left-0 top-full mt-2 w-72 bg-white rounded-xl shadow-dropdown border border-neutral-100 z-40 overflow-hidden'>
+							<input
+								autoFocus
+								type='text'
+								value={destination}
+								onChange={(e) => setDestination(e.target.value)}
+								placeholder='Where to?'
+								className='w-full px-4 py-3 text-sm border-b border-neutral-100 focus:outline-none'
+							/>
+
+							{recent.length > 0 && (
+								<div className='p-3'>
+									<p className='text-xs font-medium text-neutral-500 mb-2'>
+										Recent searches
+									</p>
+									{recent.map((r, i) => (
+										<button
+											key={i}
+											onClick={() => {
+												setDestination(r.name);
+												setShowDestinations(false);
+											}}
+											className='w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-50 text-left'>
+											<Clock
+												size={16}
+												className='text-neutral-400 shrink-0'
+											/>
+											<div>
+												<p className='text-sm font-medium text-neutral-900'>
+													{r.name}
+												</p>
+												<p className='text-xs text-neutral-500'>{r.meta}</p>
+											</div>
+										</button>
+									))}
+								</div>
+							)}
+
+							<div className='p-3 border-t border-neutral-100'>
+								<p className='text-xs font-medium text-neutral-500 mb-2'>
+									Suggested destinations
+								</p>
+								{SUGGESTED_DESTINATIONS.map((d) => (
+									<button
+										key={d.name}
+										onClick={() => {
+											setDestination(d.name);
+											setShowDestinations(false);
+										}}
+										className='w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-50 text-left'>
+										<MapPin
+											size={16}
+											className='text-neutral-400 shrink-0'
+										/>
+										<div>
+											<p className='text-sm font-medium text-neutral-900'>
+												{d.name}
+											</p>
+											<p className='text-xs text-neutral-500'>{d.desc}</p>
+										</div>
+									</button>
+								))}
+							</div>
+						</div>
+					)}
+				</div>
+
+				<div
+					ref={dateRef}
+					className='relative flex-1 min-w-0'>
+					<button
+						onClick={() => {
+							setShowDates((v) => !v);
+							setShowDestinations(false);
+							setShowGuests(false);
+						}}
+						className='w-full h-full flex items-center gap-3 px-4 text-left'>
+						<CalendarDays
+							size={20}
+							className='text-neutral-400 shrink-0'
+						/>
+						<span className='text-sm text-neutral-400'>Add dates</span>
+					</button>
+
+					{showDates && (
+						<div className='absolute left-0 top-full mt-2 bg-white rounded-xl shadow-dropdown border border-neutral-100 z-40 p-4 w-80'>
+							<p className='text-xs text-neutral-500 text-center'>
+								Date picker coming soon
+							</p>
+						</div>
+					)}
+				</div>
+
+				<div
+					ref={guestRef}
+					className='relative flex-1 min-w-0'>
+					<button
+						onClick={() => {
+							setShowGuests((v) => !v);
+							setShowDestinations(false);
+							setShowDates(false);
+						}}
+						className='w-full h-full flex items-center gap-3 px-4 text-left'>
+						<Users
+							size={20}
+							className='text-neutral-400 shrink-0'
+						/>
+						<span className='text-sm text-neutral-400'>
+							{totalGuests > 0 ?
+								`${totalGuests} guest${totalGuests > 1 ? 's' : ''}`
+							:	'Add guests'}
+						</span>
+					</button>
+
+					{showGuests && (
+						<div className='absolute right-0 top-full mt-2 bg-white rounded-xl shadow-dropdown border border-neutral-100 z-40 p-4 w-72'>
+							{GUEST_FIELDS.map(({ key, label, desc }) => (
+								<div
+									key={key}
+									className='flex items-center justify-between py-3 border-b border-neutral-100 last:border-0'>
+									<div>
+										<p className='text-sm font-medium text-neutral-900'>
+											{label}
+										</p>
+										<p className='text-xs text-neutral-500'>{desc}</p>
+									</div>
+									<div className='flex items-center gap-3'>
+										<button
+											onClick={() => updateGuest(key, -1)}
+											className='w-7 h-7 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-900 transition-colors text-sm'>
+											−
+										</button>
+										<span className='text-sm w-4 text-center'>
+											{guests[key]}
+										</span>
+										<button
+											onClick={() => updateGuest(key, 1)}
+											className='w-7 h-7 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-900 transition-colors text-sm'>
+											+
+										</button>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
+			</div>
+
+			<button
+				onClick={handleSearch}
+				className='bg-primary hover:bg-primary-hover text-white font-semibold text-sm px-6 rounded-xl transition-colors flex items-center gap-2 shrink-0 m-1.5'>
+				Find Apartment
+			</button>
+		</div>
+	);
+}
