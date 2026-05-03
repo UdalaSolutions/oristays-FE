@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { MoveLeft, Share2 } from 'lucide-react';
 import Navbar from '@/app/components/layout/Navbar';
 import Footer from '@/app/components/layout/Footer';
 
@@ -105,38 +106,16 @@ export default function ApartmentDetailPage({ params }) {
 		<>
 			<Navbar />
 
-			<main className='max-w-7xl mx-auto px-6 py-6'>
+			<main className='max-w-335 mx-auto px-6 py-14'>
 				<div className='flex items-center justify-between mb-4'>
 					<Link
 						href='/apartments'
-						className='flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900'>
-						<svg
-							className='w-4 h-4'
-							fill='none'
-							stroke='currentColor'
-							strokeWidth={1.5}
-							viewBox='0 0 24 24'>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
-							/>
-						</svg>
+						className='flex items-center font-medium gap-2 text-sm text-black hover:text-neutral-900'>
+						<MoveLeft />
 						Back
 					</Link>
 					<button className='flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900'>
-						<svg
-							className='w-4 h-4'
-							fill='none'
-							stroke='currentColor'
-							strokeWidth={1.5}
-							viewBox='0 0 24 24'>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z'
-							/>
-						</svg>
+						<Share2 className='w-5.5 h-5.5' />
 						Share
 					</button>
 				</div>
@@ -144,7 +123,7 @@ export default function ApartmentDetailPage({ params }) {
 				<div className='grid grid-cols-2 gap-2 rounded-2xl overflow-hidden mb-6 aspect-[2/1]'>
 					<div className='bg-neutral-200 relative'>
 						<img
-							src='/images/apartment-main.jpg'
+							src='/images/apartment-main.svg'
 							alt='Apartment'
 							className='w-full h-full object-cover'
 						/>
@@ -167,7 +146,7 @@ export default function ApartmentDetailPage({ params }) {
 					</div>
 				</div>
 
-				<div className='grid grid-cols-1 lg:grid-cols-3 gap-10'>
+				<div className='grid grid-cols-1 lg:grid-cols-3 gap-10 mt-2'>
 					<div className='lg:col-span-2 space-y-10'>
 						<div>
 							<div className='flex gap-2 mb-3'>
@@ -380,7 +359,7 @@ export default function ApartmentDetailPage({ params }) {
 					</div>
 
 					<div className='lg:col-span-1'>
-						<div className='sticky top-24 bg-white border border-neutral-200 rounded-2xl p-6 shadow-card'>
+						<div className='sticky top-24 bg-white border border-neutral-200 shadow-[0px_0px_30px_3px_#50A0D933] rounded-2xl p-6'>
 							<div className='flex items-start justify-between mb-5'>
 								<div>
 									<span className='text-2xl font-bold text-neutral-900'>

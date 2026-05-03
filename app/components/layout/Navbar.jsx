@@ -55,7 +55,7 @@ export default function Navbar({
 	};
 
 	return (
-		<nav className='sticky top-0 z-50 bg-white border-b border-neutral-200'>
+		<nav className='sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-[0px_0px_24px_1px_#A0C2DF33]'>
 			<div className='max-w-335 mx-auto px-6 h-20 flex items-center justify-between'>
 				<Link href='/'>
 					<Image

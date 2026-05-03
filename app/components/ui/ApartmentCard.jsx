@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Star } from 'lucide-react';
 
 const TIER_STYLES = {
 	Standard: 'bg-white text-neutral-700',
@@ -25,7 +26,7 @@ export default function ApartmentCard({ apartment }) {
 	return (
 		<Link
 			href={`/apartments/${slug || id}`}
-			className='group block border border-gray-50 rounded-b-xl'>
+			className='group block border border-gray-50 rounded-xl'>
 			<div className='relative aspect-4/3 rounded-tr-xl rounded-tl-xl overflow-hidden bg-neutral-100 mb-3'>
 				{image ?
 					<Image
@@ -45,7 +46,7 @@ export default function ApartmentCard({ apartment }) {
 			</div>
 
 			<div className='py-4 px-3 flex flex-col gap-2 '>
-				<h3 className='text-sm font-semibold text-neutral-900 mb-0.5 group-hover:text-primary transition-colors'>
+				<h3 className='font-semibold text-black mb-0.5 group-hover:text-primary transition-colors'>
 					{name}
 				</h3>
 				<p className='text-xs text-neutral-500 mb-2'>
@@ -56,20 +57,21 @@ export default function ApartmentCard({ apartment }) {
 						baths && `${baths} bath`,
 					]
 						.filter(Boolean)
-						.join(' · ')}
+						.join(' , ')}
 				</p>
 				<div className='flex items-center justify-between'>
-					<div>
-						<span className='text-sm font-bold text-neutral-900'>${price}</span>
-						<span className='text-xs text-neutral-500'>/night</span>
+					<div className='flex items-baseline'>
+						<h1 className='text-xl leading-7.5 font-bold text-black'>
+							${price}
+						</h1>
+						<span className='text-xs text-[#6B7280]'>/night</span>
 					</div>
 					{rating && (
 						<span className='flex items-center gap-1 text-xs text-neutral-600'>
-							<svg
-								className='w-3.5 h-3.5 text-yellow-400 fill-yellow-400'
-								viewBox='0 0 20 20'>
-								<path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' />
-							</svg>
+							<Star
+								size={14}
+								className='text-[#C9922A]'
+							/>
 							{rating}
 						</span>
 					)}
