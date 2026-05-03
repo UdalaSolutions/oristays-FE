@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import Navbar from '@/app/components/layout/Navbar';
+import Footer from '@/app/components/layout/Footer';
 
 const NEXT_STEPS = [
 	{

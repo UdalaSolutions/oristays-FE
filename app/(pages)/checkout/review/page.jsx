@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import BookingStepIndicator from '@/components/checkout/BookingStepIndicator';
+import Navbar from '@/app/components/layout/Navbar';
+import Footer from '@/app/components/layout/Footer';
+import BookingStepIndicator from '@/app/components/checkout/Bookingstepindicator';
 
 export default function ReviewPayPage() {
 	const router = useRouter();
