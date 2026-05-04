@@ -2,36 +2,28 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MoveLeft, Share2 } from 'lucide-react';
 import { Icon } from '@iconify/react';
+import {
+	LogIn,
+	ParkingCircle,
+	Wifi,
+	AirVent,
+	Headphones,
+	Camera,
+} from 'lucide-react';
 import Navbar from '@/app/components/layout/Navbar';
 import Footer from '@/app/components/layout/Footer';
+import DateRangePicker from '@/app/components/ui/Daterangepicker';
 
 const AMENITIES = [
-	{
-		icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
-		label: 'Self check-in',
-	},
-	{
-		icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4',
-		label: 'Free parking',
-	},
-	{
-		icon: 'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0',
-		label: 'Wifi',
-	},
-	{
-		icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-		label: 'Air conditioning',
-	},
-	{
-		icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z',
-		label: '24hr room support',
-	},
-	{
-		icon: 'M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z',
-		label: 'Security camera',
-	},
+	{ icon: LogIn, label: 'Self check-in' },
+	{ icon: ParkingCircle, label: 'Free parking' },
+	{ icon: Wifi, label: 'Wifi' },
+	{ icon: AirVent, label: 'Air conditioning' },
+	{ icon: Headphones, label: '24hr room support' },
+	{ icon: Camera, label: 'Security camera' },
 ];
 
 const REVIEWS = [
@@ -123,7 +115,9 @@ export default function ApartmentDetailPage({ params }) {
 
 				<div className='grid grid-cols-2 gap-2 rounded-2xl overflow-hidden mb-6 aspect-2/1'>
 					<div className='bg-neutral-200 relative'>
-						<img
+						<Image
+							height={0}
+							width={0}
 							src='/images/apartment-main.svg'
 							alt='Apartment'
 							className='w-full h-full object-cover'
@@ -137,7 +131,9 @@ export default function ApartmentDetailPage({ params }) {
 							<div
 								key={i}
 								className='bg-neutral-200 overflow-hidden'>
-								<img
+								<Image
+									height={0}
+									width={0}
 									src='/images/apartment-placeholder.jpg'
 									alt={`View ${i + 2}`}
 									className='w-full h-full object-cover'
@@ -224,24 +220,16 @@ export default function ApartmentDetailPage({ params }) {
 								{AMENITIES.map((a) => (
 									<div
 										key={a.label}
-										className='flex items-center gap-3 text-sm text-neutral-700'>
-										<svg
-											className='w-5 h-5 text-neutral-500 shrink-0'
-											fill='none'
-											stroke='currentColor'
+										className='flex items-center gap-3  text-black'>
+										<a.icon
+											className='w-6 h-6 text-black shrink-0'
 											strokeWidth={1.5}
-											viewBox='0 0 24 24'>
-											<path
-												strokeLinecap='round'
-												strokeLinejoin='round'
-												d={a.icon}
-											/>
-										</svg>
+										/>
 										{a.label}
 									</div>
 								))}
 							</div>
-							<button className='mt-5 border border-primary-light bg-primary-light text-primary text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors'>
+							<button className='w-50 h-12.5 mt-5 border border-primary-light bg-primary-light text-primary  font-bold px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors'>
 								Show all amenities
 							</button>
 						</div>
@@ -271,9 +259,7 @@ export default function ApartmentDetailPage({ params }) {
 							<p className='text-sm text-neutral-500 mb-6'>
 								Add travel dates to see prices
 							</p>
-							<div className='bg-neutral-50 rounded-xl p-4 text-center text-sm text-neutral-500'>
-								Calendar component — integrate date picker here
-							</div>
+							<DateRangePicker onDatesChange={({ checkIn, checkOut }) => {}} />
 						</div>
 
 						<div className='border-t border-neutral-100 pt-8'>
