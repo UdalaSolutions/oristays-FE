@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { MoveLeft, Share2 } from 'lucide-react';
+import { Icon } from '@iconify/react';
 import Navbar from '@/app/components/layout/Navbar';
 import Footer from '@/app/components/layout/Footer';
 
@@ -120,7 +121,7 @@ export default function ApartmentDetailPage({ params }) {
 					</button>
 				</div>
 
-				<div className='grid grid-cols-2 gap-2 rounded-2xl overflow-hidden mb-6 aspect-[2/1]'>
+				<div className='grid grid-cols-2 gap-2 rounded-2xl overflow-hidden mb-6 aspect-2/1'>
 					<div className='bg-neutral-200 relative'>
 						<img
 							src='/images/apartment-main.svg'
@@ -148,9 +149,22 @@ export default function ApartmentDetailPage({ params }) {
 
 				<div className='grid grid-cols-1 lg:grid-cols-3 gap-10 mt-2'>
 					<div className='lg:col-span-2 space-y-10'>
-						<div>
+						<div className='flex gap-1 flex-col mt-2'>
 							<div className='flex gap-2 mb-3'>
-								<span className='bg-primary-light text-primary text-xs font-medium px-2.5 py-1 rounded-full'>
+								<span className='bg-[#0D1B2A1A] text-[#0D1B2A] text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1'>
+									<Icon
+										icon='material-symbols:star'
+										width='14'
+										height='14'
+									/>
+									New
+								</span>
+								<span className='bg-primary-light text-primary text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1'>
+									<Icon
+										icon='material-symbols:star'
+										width='14'
+										height='14'
+									/>
 									Premium tier
 								</span>
 								<span className='bg-green-50 text-green-700 text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1'>
@@ -180,22 +194,22 @@ export default function ApartmentDetailPage({ params }) {
 							</p>
 						</div>
 
-						<div className='flex items-center gap-3 pb-6 border-b border-neutral-100'>
-							<div className='w-10 h-10 rounded-full bg-neutral-800 text-white flex items-center justify-center text-sm font-semibold'>
+						<div className='flex  gap-4 pb-6 border-b border-neutral-100 flex-col'>
+							<div className='w-20 h-20 rounded-full bg-brand-dark text-white flex items-center justify-center text-2xl font-bold'>
 								A
 							</div>
 							<div>
-								<p className='text-sm font-medium text-neutral-900'>
+								<p className='text-xl font-bold text-black'>
 									Hosted by Adeyemi
 								</p>
 								<p className='text-xs text-neutral-500'>5 years hosting</p>
 							</div>
-							<button className='ml-auto border border-primary-light bg-primary-light text-primary text-xs font-medium px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors'>
+							<button className='h-13 max-w-50 border border-primary-light bg-primary-light text-primary text-xs font-medium px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors'>
 								Message host
 							</button>
 						</div>
 
-						<p className='text-sm text-neutral-600 leading-relaxed'>
+						<p className='text-black leading-6'>
 							A thoughtfully designed one bedroom premium apartment created for
 							comfort, privacy, and a seamless stay. Perfect for up to two
 							guests, this space offers a calm, modern atmosphere ideal for both
@@ -203,16 +217,16 @@ export default function ApartmentDetailPage({ params }) {
 						</p>
 
 						<div className='border-t border-neutral-100 pt-8'>
-							<h2 className='text-lg font-semibold text-neutral-900 mb-5'>
+							<h2 className='text-2xl font-bold leading-6 text-black'>
 								Amenities
 							</h2>
-							<div className='grid grid-cols-2 gap-3'>
+							<div className='grid grid-cols-2 gap-3 my-5'>
 								{AMENITIES.map((a) => (
 									<div
 										key={a.label}
 										className='flex items-center gap-3 text-sm text-neutral-700'>
 										<svg
-											className='w-5 h-5 text-neutral-500 flex-shrink-0'
+											className='w-5 h-5 text-neutral-500 shrink-0'
 											fill='none'
 											stroke='currentColor'
 											strokeWidth={1.5}
