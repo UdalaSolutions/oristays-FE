@@ -6,13 +6,32 @@ import StepMethod from '@/app/components/host/listing-steps/StepMethod';
 import StepUnits from '@/app/components/host/listing-steps/StepUnits';
 import StepLocation from '@/app/components/host/listing-steps/StepLocation';
 import StepBasicDetails from '@/app/components/host/listing-steps/StepBasicDetails';
+import StepSetupUnits from '@/app/components/host/listing-steps/StepSetupUnits';
 import StepPhotos from '@/app/components/host/listing-steps/StepPhotos';
+import StepPhotosMulti from '@/app/components/host/listing-steps/StepPhotosMulti';
 import StepAmenities from '@/app/components/host/listing-steps/StepAmenities';
 import StepHouseRules from '@/app/components/host/listing-steps/StepHouseRules';
 import StepBookingSettings from '@/app/components/host/listing-steps/StepBookingSettings';
 import StepSetPrice from '@/app/components/host/listing-steps/StepSetPrice';
+import StepSetPriceMulti from '@/app/components/host/listing-steps/StepSetPriceMulti';
 
 const TOTAL_STEPS = 8;
+
+function createUnit() {
+	return {
+		id: crypto.randomUUID(),
+		expanded: true,
+		name: '',
+		type: '',
+		description: '',
+		guests: 0,
+		bedrooms: 0,
+		beds: 0,
+		bathrooms: 0,
+		photos: [],
+		price: 25,
+	};
+}
 
 export default function CreateListingPage() {
 	const router = useRouter();
@@ -31,8 +50,9 @@ export default function CreateListingPage() {
 	const [bedrooms, setBedrooms] = useState(0);
 	const [beds, setBeds] = useState(0);
 	const [bathrooms, setBathrooms] = useState(0);
-
 	const [photos, setPhotos] = useState([]);
+
+	const [units, setUnits] = useState([createUnit()]);
 
 	const [selectedAmenities, setSelectedAmenities] = useState([]);
 
@@ -48,20 +68,43 @@ export default function CreateListingPage() {
 	const [quietHoursTo, setQuietHoursTo] = useState('7:00 AM');
 
 	const [bookingType, setBookingType] = useState('');
-
 	const [price, setPrice] = useState(25);
+
+	const isMultiple = unitType === 'multiple';
+
+	const step3Valid = isMultiple
+		? units.length > 0 && !!units[0].name.trim() && !!units[0].type
+		: !!propertyName.trim() && !!propertyType;
+
+	const step8Valid = isMultiple ? units.every((u) => (u.price ?? 0) > 0) : price > 0;
 
 	const canProceed = [
 		!!method,
 		!!unitType,
 		!!address.trim(),
-		!!propertyName.trim() && !!propertyType,
+		step3Valid,
 		true,
 		selectedAmenities.length > 0,
 		true,
 		!!bookingType,
-		price > 0,
+		step8Valid,
 	][step] ?? false;
+
+	function addUnit() {
+		setUnits((prev) => [...prev, createUnit()]);
+	}
+
+	function deleteUnit(id) {
+		setUnits((prev) => prev.filter((u) => u.id !== id));
+	}
+
+	function updateUnit(id, field, value) {
+		setUnits((prev) => prev.map((u) => (u.id === id ? { ...u, [field]: value } : u)));
+	}
+
+	function toggleUnitExpanded(id) {
+		setUnits((prev) => prev.map((u) => (u.id === id ? { ...u, expanded: !u.expanded } : u)));
+	}
 
 	function toggleAmenity(id) {
 		setSelectedAmenities((prev) =>
@@ -107,7 +150,7 @@ export default function CreateListingPage() {
 						setUnitNumber={setUnitNumber}
 					/>
 				)}
-				{step === 3 && (
+				{step === 3 && !isMultiple && (
 					<StepBasicDetails
 						propertyName={propertyName}
 						setPropertyName={setPropertyName}
@@ -125,7 +168,21 @@ export default function CreateListingPage() {
 						setBathrooms={setBathrooms}
 					/>
 				)}
-				{step === 4 && <StepPhotos photos={photos} setPhotos={setPhotos} />}
+				{step === 3 && isMultiple && (
+					<StepSetupUnits
+						units={units}
+						onAdd={addUnit}
+						onDelete={deleteUnit}
+						onUpdate={updateUnit}
+						onToggleExpanded={toggleUnitExpanded}
+					/>
+				)}
+				{step === 4 && !isMultiple && (
+					<StepPhotos photos={photos} setPhotos={setPhotos} />
+				)}
+				{step === 4 && isMultiple && (
+					<StepPhotosMulti units={units} onUpdateUnit={updateUnit} />
+				)}
 				{step === 5 && (
 					<StepAmenities selected={selectedAmenities} onToggle={toggleAmenity} />
 				)}
@@ -146,7 +203,10 @@ export default function CreateListingPage() {
 				{step === 7 && (
 					<StepBookingSettings selected={bookingType} onSelect={setBookingType} />
 				)}
-				{step === 8 && <StepSetPrice price={price} setPrice={setPrice} />}
+				{step === 8 && !isMultiple && <StepSetPrice price={price} setPrice={setPrice} />}
+				{step === 8 && isMultiple && (
+					<StepSetPriceMulti units={units} onUpdateUnit={updateUnit} />
+				)}
 			</div>
 
 			<div className='fixed bottom-0 left-60 right-0 bg-white border-t border-neutral-100 px-8 py-4 flex items-center justify-between'>

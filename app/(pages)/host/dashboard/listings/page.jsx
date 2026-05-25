@@ -30,8 +30,6 @@ export default function ListingsPage() {
 							<ListingCard
 								key={listing.id}
 								listing={listing}
-								onEdit={() => {}}
-								onCalendar={() => {}}
 							/>
 						))}
 					</div>
