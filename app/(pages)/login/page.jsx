@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -13,7 +14,23 @@ export default function LoginPage() {
 
 	function handleLogin(e) {
 		e.preventDefault();
-		router.push('/');
+		// Dummy sign-in: check localStorage for a registered host, else accept any credentials
+		const stored = localStorage.getItem('hostUser');
+		if (stored) {
+			const host = JSON.parse(stored);
+			if (host.email === email) {
+				localStorage.setItem('isLoggedIn', 'true');
+				router.push('/');
+				return;
+			}
+		}
+		// Fallback: accept any email + password (demo mode)
+		localStorage.setItem('isLoggedIn', 'true');
+		localStorage.setItem(
+			'hostUser',
+			JSON.stringify({ email, firstName: email.split('@')[0], role: 'host' })
+		);
+		router.push('/host/dashboard');
 	}
 
 	return (
@@ -96,11 +113,11 @@ export default function LoginPage() {
 							/>
 							<span className='text-sm text-neutral-700'>Remember me</span>
 						</label>
-						<button
-							type='button'
+						<Link
+							href='/forgot-password'
 							className='text-sm font-medium text-primary hover:text-primary-hover'>
 							Forgot password?
-						</button>
+						</Link>
 					</div>
 
 					<button
@@ -112,9 +129,17 @@ export default function LoginPage() {
 					<p className='text-center text-sm text-neutral-600'>
 						Don&apos;t have an account?{' '}
 						<Link
-							href='/signup'
+							href='/host/register'
 							className='font-semibold text-primary hover:text-primary-hover'>
 							Create account
+						</Link>
+					</p>
+					<p className='text-center text-sm text-neutral-600'>
+						Want to list your space?{' '}
+						<Link
+							href='/host'
+							className='font-semibold text-primary hover:text-primary-hover'>
+							Become a host
 						</Link>
 					</p>
 				</form>

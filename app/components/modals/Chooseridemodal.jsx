@@ -9,15 +9,15 @@ const RIDE_OPTIONS = [
 		label: 'Executive saloon',
 		seats: 5,
 		price: 45,
-		image: '/images/executive-saloon.png',
+		image: '/images/executive-saloon.svg',
 	},
-	{ id: 'suv', label: 'SUV', seats: 4, price: 60, image: '/images/suv.png' },
+	{ id: 'suv', label: 'SUV', seats: 4, price: 60, image: '/images/suv.svg' },
 	{
 		id: 'electric',
 		label: 'Electric car',
 		seats: 4,
 		price: 75,
-		image: '/images/electric.png',
+		image: '/images/electric.svg',
 	},
 ];
 
@@ -43,10 +43,10 @@ export default function ChooseRideModal({ isOpen, onClose, onSelectRide }) {
 						onClick={() => setSelected(ride.id)}
 						className={`w-full flex items-center gap-4 p-3 rounded-xl border-2 text-left transition-colors ${
 							selected === ride.id ?
-								'border-neutral-900 bg-white'
-							:	'border-neutral-100 hover:border-neutral-200 bg-white'
+								'border-neutral-100 hover:border-neutral-200 shadow-[0px_0px_24px_1px_#A0C2DF33] bg-white'
+							:	'border-none bg-white'
 						}`}>
-						<div className='w-16 h-12 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
+						<div className='w-16 h-12 flex items-center justify-center flex-shrink-0 overflow-hidden'>
 							{ride.image ?
 								<img
 									src={ride.image}

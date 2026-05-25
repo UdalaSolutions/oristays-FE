@@ -39,7 +39,7 @@ export default function AboutPage() {
 						/>
 						<div className='absolute inset-0 bg-black/50' />
 					</div>
-					<div className='relative z-10 max-w-7xl mx-auto px-6 py-16 w-full'>
+					<div className='relative z-10 max-w-335 mx-auto  w-full'>
 						<span className='inline-block border border-primary text-primary text-xs font-medium px-3 py-1.5 rounded-full mb-6'>
 							Our story
 						</span>

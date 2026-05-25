@@ -30,7 +30,7 @@ export default function CheckoutPage() {
 		<>
 			<Navbar />
 
-			<main className='max-w-2xl mx-auto px-6 py-8'>
+			<main className='max-w-2xl mx-auto px-6 py-16'>
 				<div className='flex items-center gap-4 mb-8'>
 					<Link
 						href='/apartments/modern-loft-apartment-0'
@@ -49,12 +49,12 @@ export default function CheckoutPage() {
 						</svg>
 						Back
 					</Link>
-					<h1 className='text-xl font-semibold text-neutral-900'>
+					<h1 className='text-black text-2xl font-bold leading-8'>
 						Booking details
 					</h1>
 				</div>
 
-				<div className='bg-white border border-neutral-200 rounded-2xl overflow-hidden'>
+				<div className='bg-white border border-neutral-200 shadow-[0px_0px_24px_1px_#A0C2DF33] rounded-2xl overflow-hidden'>
 					<div className='p-5 border-b border-neutral-100'>
 						<div className='flex items-center gap-4'>
 							<div className='w-20 h-16 rounded-lg bg-neutral-200 overflow-hidden flex-shrink-0'>

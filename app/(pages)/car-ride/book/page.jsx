@@ -29,7 +29,7 @@ export default function BookRidePage() {
 	const [selectedRide, setSelectedRide] = useState(null);
 
 	const canSeePrice =
-		tab === 'car' ? rideType && pickupAddress : flightNumber && arrivalAirport;
+		tab === 'car' ? pickupAddress : flightNumber && arrivalAirport;
 
 	function handleSeePrices() {
 		if (!canSeePrice) return;
@@ -41,7 +41,7 @@ export default function BookRidePage() {
 			<Navbar />
 
 			<main className='min-h-screen bg-white'>
-				<div className='max-w-7xl mx-auto px-6 py-6'>
+				<div className='max-w-335 mx-auto px-6 py-6'>
 					<Link
 						href='/car-ride'
 						className='inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 mb-6'>
@@ -65,9 +65,9 @@ export default function BookRidePage() {
 					</h1>
 
 					<div className='flex flex-col md:flex-row gap-6'>
-						<div className='w-full md:w-80 flex-shrink-0'>
-							<div className='bg-white rounded-2xl border-2 border-primary/30 p-5'>
-								<div className='flex rounded-xl bg-primary-light p-1 mb-5'>
+						<div className='w-full md:w-[332px] flex-shrink-0'>
+							<div className='bg-[#FAF6F0] rounded-2xl border-2 border-primary/30 p-5'>
+								<div className='flex mb-5'>
 									{['car', 'airport'].map((t) => (
 										<button
 											key={t}
@@ -75,9 +75,9 @@ export default function BookRidePage() {
 												setTab(t);
 												setShowRides(false);
 											}}
-											className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
+											className={`flex-1 py-2 text-sm font-medium rounded-full transition-colors ${
 												tab === t ?
-													'bg-white text-neutral-900 shadow-sm'
+													'bg-[#B5451B1A] text-neutral-900'
 												:	'text-neutral-600'
 											}`}>
 											{t === 'car' ? 'Car ride' : 'Airport transfers'}
@@ -87,7 +87,7 @@ export default function BookRidePage() {
 
 								{tab === 'car' ?
 									<div className='divide-y divide-neutral-100'>
-										<div className='flex items-center gap-3 py-3'>
+										{/* <div className='flex items-center gap-3 py-3'>
 											<svg
 												className='w-4 h-4 text-neutral-400 flex-shrink-0'
 												fill='none'
@@ -125,7 +125,7 @@ export default function BookRidePage() {
 													d='M19 9l-7 7-7-7'
 												/>
 											</svg>
-										</div>
+										</div> */}
 										<div className='flex items-center gap-3 py-3'>
 											<svg
 												className='w-4 h-4 text-neutral-400 flex-shrink-0'
