@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, CalendarDays, Users, MapPin, Clock } from 'lucide-react';
+import DateRangePicker from '@/app/components/ui/Daterangepicker';
 
 const SUGGESTED_DESTINATIONS = [
 	{ name: 'Lekki', desc: 'Explore beach houses' },
@@ -35,12 +36,9 @@ export default function SearchBar({ recent = [] }) {
 	const [showDestinations, setShowDestinations] = useState(false);
 	const [showDates, setShowDates] = useState(false);
 	const [showGuests, setShowGuests] = useState(false);
-	const [guests, setGuests] = useState({
-		adults: 0,
-		children: 0,
-		infants: 0,
-		pets: 0,
-	});
+	const [guests, setGuests] = useState({ adults: 0, children: 0, infants: 0, pets: 0 });
+	const [checkIn, setCheckIn] = useState(null);
+	const [checkOut, setCheckOut] = useState(null);
 
 	const destRef = useRef(null);
 	const dateRef = useRef(null);
@@ -59,29 +57,21 @@ export default function SearchBar({ recent = [] }) {
 	function handleSearch() {
 		const params = new URLSearchParams();
 		if (destination) params.set('destination', destination);
+		if (checkIn) params.set('checkIn', checkIn.toISOString().split('T')[0]);
+		if (checkOut) params.set('checkOut', checkOut.toISOString().split('T')[0]);
 		if (totalGuests > 0) params.set('guests', totalGuests);
 		router.push(`/apartments?${params.toString()}`);
 	}
 
 	return (
-		<div className='bg-[#FAF6F0] rounded-2xl border border-primary h-18 flex items-stretch overflow-visible'>
-			<div className='flex items-stretch flex-1 divide-x divide-neutral-200 min-w-0'>
-				<div
-					ref={destRef}
-					className='relative flex-1 min-w-0'>
+		<div className='bg-[#FAF6F0] rounded-2xl border border-primary overflow-visible'>
+			<div className='flex flex-col md:flex-row md:items-stretch md:h-18'>
+				<div ref={destRef} className='relative flex-1 min-w-0'>
 					<button
-						onClick={() => {
-							setShowDestinations(true);
-							setShowDates(false);
-							setShowGuests(false);
-						}}
-						className='w-full h-full flex items-center gap-3 px-4 text-left'>
-						<Search
-							size={20}
-							className='text-neutral-400 shrink-0'
-						/>
-						<span
-							className={`text-sm truncate ${destination ? 'text-neutral-900' : 'text-neutral-400'}`}>
+						onClick={() => { setShowDestinations(true); setShowDates(false); setShowGuests(false); }}
+						className='w-full flex items-center gap-3 px-4 py-4 md:h-full text-left border-b border-neutral-200 md:border-b-0 md:border-r'>
+						<Search size={20} className='text-neutral-400 shrink-0' />
+						<span className={`text-sm truncate ${destination ? 'text-neutral-900' : 'text-neutral-400'}`}>
 							{destination || 'Search destinations'}
 						</span>
 					</button>
@@ -99,25 +89,15 @@ export default function SearchBar({ recent = [] }) {
 
 							{recent.length > 0 && (
 								<div className='p-3'>
-									<p className='text-xs font-medium text-neutral-500 mb-2'>
-										Recent searches
-									</p>
+									<p className='text-xs font-medium text-neutral-500 mb-2'>Recent searches</p>
 									{recent.map((r, i) => (
 										<button
 											key={i}
-											onClick={() => {
-												setDestination(r.name);
-												setShowDestinations(false);
-											}}
+											onClick={() => { setDestination(r.name); setShowDestinations(false); }}
 											className='w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-50 text-left'>
-											<Clock
-												size={16}
-												className='text-neutral-400 shrink-0'
-											/>
+											<Clock size={16} className='text-neutral-400 shrink-0' />
 											<div>
-												<p className='text-sm font-medium text-neutral-900'>
-													{r.name}
-												</p>
+												<p className='text-sm font-medium text-neutral-900'>{r.name}</p>
 												<p className='text-xs text-neutral-500'>{r.meta}</p>
 											</div>
 										</button>
@@ -126,25 +106,15 @@ export default function SearchBar({ recent = [] }) {
 							)}
 
 							<div className='p-3 border-t border-neutral-100'>
-								<p className='text-xs font-medium text-neutral-500 mb-2'>
-									Suggested destinations
-								</p>
+								<p className='text-xs font-medium text-neutral-500 mb-2'>Suggested destinations</p>
 								{SUGGESTED_DESTINATIONS.map((d) => (
 									<button
 										key={d.name}
-										onClick={() => {
-											setDestination(d.name);
-											setShowDestinations(false);
-										}}
+										onClick={() => { setDestination(d.name); setShowDestinations(false); }}
 										className='w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-50 text-left'>
-										<MapPin
-											size={16}
-											className='text-neutral-400 shrink-0'
-										/>
+										<MapPin size={16} className='text-neutral-400 shrink-0' />
 										<div>
-											<p className='text-sm font-medium text-neutral-900'>
-												{d.name}
-											</p>
+											<p className='text-sm font-medium text-neutral-900'>{d.name}</p>
 											<p className='text-xs text-neutral-500'>{d.desc}</p>
 										</div>
 									</button>
@@ -154,63 +124,49 @@ export default function SearchBar({ recent = [] }) {
 					)}
 				</div>
 
-				<div
-					ref={dateRef}
-					className='relative flex-1 min-w-0'>
+				<div ref={dateRef} className='relative flex-1 min-w-0'>
 					<button
-						onClick={() => {
-							setShowDates((v) => !v);
-							setShowDestinations(false);
-							setShowGuests(false);
-						}}
-						className='w-full h-full flex items-center gap-3 px-4 text-left'>
-						<CalendarDays
-							size={20}
-							className='text-neutral-400 shrink-0'
-						/>
-						<span className='text-sm text-neutral-400'>Add dates</span>
+						onClick={() => { setShowDates((v) => !v); setShowDestinations(false); setShowGuests(false); }}
+						className='w-full flex items-center gap-3 px-4 py-4 md:h-full text-left border-b border-neutral-200 md:border-b-0 md:border-r'>
+						<CalendarDays size={20} className='text-neutral-400 shrink-0' />
+						<span className={`text-sm truncate ${checkIn ? 'text-neutral-900' : 'text-neutral-400'}`}>
+							{checkIn
+								? checkOut
+									? `${checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${checkOut.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+									: checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+								: 'Add dates'}
+						</span>
 					</button>
 
 					{showDates && (
-						<div className='absolute left-0 top-full mt-2 bg-white rounded-xl shadow-dropdown border border-neutral-100 z-40 p-4 w-80'>
-							<p className='text-xs text-neutral-500 text-center'>
-								Date picker coming soon
-							</p>
+						<div className='absolute left-0 top-full mt-2 z-40'>
+							<DateRangePicker
+								onDatesChange={({ checkIn: ci, checkOut: co }) => {
+									setCheckIn(ci);
+									setCheckOut(co);
+								}}
+								onClose={() => setShowDates(false)}
+							/>
 						</div>
 					)}
 				</div>
 
-				<div
-					ref={guestRef}
-					className='relative flex-1 min-w-0'>
+				<div ref={guestRef} className='relative flex-1 min-w-0'>
 					<button
-						onClick={() => {
-							setShowGuests((v) => !v);
-							setShowDestinations(false);
-							setShowDates(false);
-						}}
-						className='w-full h-full flex items-center gap-3 px-4 text-left'>
-						<Users
-							size={20}
-							className='text-neutral-400 shrink-0'
-						/>
+						onClick={() => { setShowGuests((v) => !v); setShowDestinations(false); setShowDates(false); }}
+						className='w-full flex items-center gap-3 px-4 py-4 md:h-full text-left'>
+						<Users size={20} className='text-neutral-400 shrink-0' />
 						<span className='text-sm text-neutral-400'>
-							{totalGuests > 0 ?
-								`${totalGuests} guest${totalGuests > 1 ? 's' : ''}`
-							:	'Add guests'}
+							{totalGuests > 0 ? `${totalGuests} guest${totalGuests > 1 ? 's' : ''}` : 'Add guests'}
 						</span>
 					</button>
 
 					{showGuests && (
 						<div className='absolute right-0 top-full mt-2 bg-white rounded-xl shadow-dropdown border border-neutral-100 z-40 p-4 w-72'>
 							{GUEST_FIELDS.map(({ key, label, desc }) => (
-								<div
-									key={key}
-									className='flex items-center justify-between py-3 border-b border-neutral-100 last:border-0'>
+								<div key={key} className='flex items-center justify-between py-3 border-b border-neutral-100 last:border-0'>
 									<div>
-										<p className='text-sm font-medium text-neutral-900'>
-											{label}
-										</p>
+										<p className='text-sm font-medium text-neutral-900'>{label}</p>
 										<p className='text-xs text-neutral-500'>{desc}</p>
 									</div>
 									<div className='flex items-center gap-3'>
@@ -219,9 +175,7 @@ export default function SearchBar({ recent = [] }) {
 											className='w-7 h-7 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-900 transition-colors text-sm'>
 											−
 										</button>
-										<span className='text-sm w-4 text-center'>
-											{guests[key]}
-										</span>
+										<span className='text-sm w-4 text-center'>{guests[key]}</span>
 										<button
 											onClick={() => updateGuest(key, 1)}
 											className='w-7 h-7 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-900 transition-colors text-sm'>
@@ -233,13 +187,15 @@ export default function SearchBar({ recent = [] }) {
 						</div>
 					)}
 				</div>
-			</div>
 
-			<button
-				onClick={handleSearch}
-				className='bg-primary hover:bg-primary-hover text-white font-semibold text-sm px-6 rounded-xl transition-colors flex items-center gap-2 shrink-0 m-1.5'>
-				Find Apartment
-			</button>
+				<div className='p-3 md:flex md:items-center md:p-1.5'>
+					<button
+						onClick={handleSearch}
+						className='w-full md:w-auto bg-primary hover:bg-primary-hover text-white font-semibold text-sm px-6 py-3 md:py-0 md:h-full rounded-xl transition-colors flex items-center justify-center gap-2'>
+						Find Apartment
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 }

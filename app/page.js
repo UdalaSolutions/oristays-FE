@@ -6,6 +6,7 @@ import { StatsBar } from './components/home/StatsBar';
 import { ApartmentSection } from './components/home/ApartmentSection';
 import { FAQSection } from './components/home/FAQSection';
 import { HowItWorks } from './components/home/HowItWorks';
+import { UpcomingTrip } from './components/home/UpcomingTrip';
 import SearchBar from './components/home/Searchbar';
 import Footer from './components/layout/Footer';
 import LoginModal from './components/modals/Loginmodal';
@@ -39,7 +40,7 @@ export default function HomePage() {
 			/>
 
 			<main>
-				<section className='relative min-h-153 flex flex-col justify-center'>
+				<section className='relative min-h-[90vh] md:min-h-153 flex flex-col justify-center'>
 					<div className='absolute inset-0'>
 						<Image
 							src='/images/hero-pool.svg'
@@ -51,11 +52,11 @@ export default function HomePage() {
 						<div className='absolute inset-0 bg-linear-to-r from-black/60 via-black/40 to-transparent' />
 					</div>
 
-					<div className='relative z-10 max-w-335 mx-auto px-6 py-16 w-full'>
-						<span className='inline-block bg-primary/30 text-[#EB997A] text-sm  px-3 py-1.5 rounded-full mb-6 border border-primary'>
+					<div className='relative z-10 max-w-335 mx-auto px-6 py-12 md:py-16 w-full'>
+						<span className='inline-block bg-primary/30 text-[#EB997A] text-sm px-3 py-1.5 rounded-full mb-6 border border-primary'>
 							Lagos, Nigeria 2026
 						</span>
-						<h1 className='text-4xl md:text-5xl lg:text-[56px] font-bold text-white leading-tight mb-4 max-w-xl'>
+						<h1 className='text-3xl md:text-5xl lg:text-[56px] font-bold text-white leading-tight mb-4 max-w-xl'>
 							Arrive in Lagos,
 							<br />
 							leave the rest to us.
@@ -65,7 +66,7 @@ export default function HomePage() {
 							from your first click to your last night.
 						</p>
 
-						<div className='max-w-278'>
+						<div className='md:max-w-278'>
 							<SearchBar recent={RECENT_SEARCHES} />
 						</div>
 					</div>
@@ -73,7 +74,8 @@ export default function HomePage() {
 
 				<StatsBar />
 
-				<div className='max-w-335 mx-auto px-6 py-14 space-y-14'>
+				<div className='max-w-335 mx-auto px-6 py-10 md:py-14 space-y-10 md:space-y-14'>
+					<UpcomingTrip />
 					<ApartmentSection
 						title='Favorites in Lekki'
 						apartments={MOCK_APARTMENTS}
@@ -90,7 +92,8 @@ export default function HomePage() {
 						viewAllHref='/apartments?area=ikoyi'
 					/>
 				</div>
-				<div className=' py-14 space-y-14'>
+
+				<div className='py-10 md:py-14 space-y-10 md:space-y-14'>
 					<HowItWorks />
 					<FAQSection />
 				</div>
