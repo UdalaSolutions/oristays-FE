@@ -4,16 +4,16 @@ const FOOTER_LINKS = {
 	Explore: [
 		{ label: 'Apartments', href: '/apartments' },
 		{ label: 'Ride Services', href: '/car-ride' },
-		{ label: 'Trip Itinerary', href: '/trips' },
+		// { label: 'Trip Itinerary', href: '/trips' },
 	],
 	Company: [
 		{ label: 'About Us', href: '/about' },
-		{ label: 'List your property', href: '/list-property' },
+		{ label: 'List your property', href: '/host' },
 	],
 	Support: [
 		{ label: 'Help Center', href: '/help' },
 		{ label: 'WhatsApp us', href: 'https://wa.me/', external: true },
-		{ label: 'FAQs', href: '/faqs' },
+		// { label: 'FAQs', href: '/faqs' },
 	],
 };
 
