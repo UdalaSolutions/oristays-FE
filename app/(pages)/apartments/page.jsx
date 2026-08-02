@@ -6,7 +6,9 @@ import Navbar from '@/app/components/layout/Navbar';
 import ApartmentCard from '@/app/components/ui/ApartmentCard';
 import Footer from '../../components/layout/Footer';
 import FilterModal from '@/app/components/modals/Filtermodal';
+import LoginModal from '@/app/components/modals/Loginmodal';
 import Pagination from '@/app/components/ui/Pagination';
+import { useAuth } from '@/app/lib/useAuth';
 
 const MOCK_APARTMENTS = Array.from({ length: 12 }, (_, i) => ({
 	id: `apt-${i}`,
@@ -24,7 +26,9 @@ const MOCK_APARTMENTS = Array.from({ length: 12 }, (_, i) => ({
 
 function ApartmentsContent() {
 	const searchParams = useSearchParams();
+	const { isLoggedIn, user, login, logout } = useAuth();
 	const [filterOpen, setFilterOpen] = useState(false);
+	const [loginOpen, setLoginOpen] = useState(false);
 	const [activeFilters, setActiveFilters] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -38,7 +42,15 @@ function ApartmentsContent() {
 
 	return (
 		<>
-			<Navbar />
+			<Navbar
+				variant='search'
+				isLoggedIn={isLoggedIn}
+				user={user}
+				onSignupClick={() => setLoginOpen(true)}
+				onLoginClick={() => setLoginOpen(true)}
+				onLogout={logout}
+				onFilterClick={() => setFilterOpen(true)}
+			/>
 			<main className='md:w-335 mx-auto px-6 py-12'>
 				{!hasResults ?
 					<div>
@@ -78,6 +90,15 @@ function ApartmentsContent() {
 				isOpen={filterOpen}
 				onClose={() => setFilterOpen(false)}
 				onApply={(filters) => setActiveFilters(filters)}
+			/>
+
+			<LoginModal
+				isOpen={loginOpen}
+				onClose={() => setLoginOpen(false)}
+				onSuccess={(email) => {
+					login(email);
+					setLoginOpen(false);
+				}}
 			/>
 		</>
 	);

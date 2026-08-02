@@ -15,7 +15,9 @@ import {
 	LogOut,
 	Menu,
 	X,
+	SlidersHorizontal,
 } from 'lucide-react';
+import NavSearch from './NavSearch';
 
 const NAV_LINKS = [
 	{ label: 'Homes', href: '/', icon: BedDouble },
@@ -27,20 +29,33 @@ const USER_MENU = [
 	{ label: 'Trips', icon: Briefcase, href: '/trips' },
 	{ label: 'Messages', icon: MessageCircle, href: '/messages' },
 	{ label: 'Notifications', icon: Bell, href: '/notifications' },
-	{ label: 'Get help', icon: HelpCircle, href: '/help' },
-	{ label: 'Log out', icon: LogOut, href: '/logout', danger: true },
+	{ label: 'Get help', icon: HelpCircle, href: '/help', dividerBefore: true },
+	{ label: 'Log out', icon: LogOut, action: 'logout' },
 ];
 
-export default function Navbar({ isLoggedIn = false, user = null, onLoginClick, onSignupClick }) {
+export default function Navbar({
+	isLoggedIn = false,
+	user = null,
+	onLoginClick,
+	onSignupClick,
+	onLogout,
+	variant = 'default',
+	onFilterClick,
+}) {
 	const pathname = usePathname();
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [getStartedOpen, setGetStartedOpen] = useState(false);
 	const [mobileNavOpen, setMobileNavOpen] = useState(false);
 	const menuRef = useRef(null);
+	const getStartedRef = useRef(null);
 
 	useEffect(() => {
 		function handleClickOutside(e) {
 			if (menuRef.current && !menuRef.current.contains(e.target)) {
 				setMenuOpen(false);
+			}
+			if (getStartedRef.current && !getStartedRef.current.contains(e.target)) {
+				setGetStartedOpen(false);
 			}
 		}
 		document.addEventListener('mousedown', handleClickOutside);
@@ -74,68 +89,148 @@ export default function Navbar({ isLoggedIn = false, user = null, onLoginClick, 
 						/>
 					</Link>
 
-					<div className='hidden md:flex items-center justify-between gap-1 bg-white rounded-full p-2 h-12 shadow-[0px_0px_24px_1px_#A0C2DF33] w-100'>
-						{NAV_LINKS.map((link) => {
-							const Icon = link.icon;
-							return (
-								<Link
-									key={link.href}
-									href={link.href}
-									className={`flex w-full items-center justify-center gap-2 px-4 py-2 rounded-full font-bold transition-colors ${
-										isActive(link.href)
-											? 'bg-transparent text-primary border border-primary'
-											: 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
-									}`}>
-									<Icon size={16} strokeWidth={1.5} />
-									{link.label}
-								</Link>
-							);
-						})}
-					</div>
+					{variant === 'search' ? (
+						<div className='hidden md:flex items-center gap-3'>
+							<NavSearch />
+							<button
+								onClick={onFilterClick}
+								className='flex items-center gap-2 border border-neutral-200 rounded-xl px-4 h-11 text-sm font-medium text-neutral-900 hover:bg-neutral-50 transition-colors shrink-0'>
+								<SlidersHorizontal size={16} strokeWidth={1.5} />
+								Filters
+							</button>
+						</div>
+					) : variant === 'minimal' ? null : (
+						<div className='hidden md:flex items-center justify-between gap-1 bg-white rounded-full p-2 h-12 shadow-[0px_0px_24px_1px_#A0C2DF33] w-100'>
+							{NAV_LINKS.map((link) => {
+								const Icon = link.icon;
+								return (
+									<Link
+										key={link.href}
+										href={link.href}
+										className={`flex w-full items-center justify-center gap-2 px-4 py-2 rounded-full font-bold transition-colors ${
+											isActive(link.href)
+												? 'bg-transparent text-primary border border-primary'
+												: 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+										}`}>
+										<Icon size={16} strokeWidth={1.5} />
+										{link.label}
+									</Link>
+								);
+							})}
+						</div>
+					)}
 
 					<div className='hidden md:flex items-center gap-6'>
-						<Link
-							href='/about'
-							className={`transition-colors ${pathname === '/about' ? 'text-primary' : 'text-[#6B7280] hover:text-primary'}`}>
-							About us
-						</Link>
+						{variant !== 'minimal' && (
+							<Link
+								href='/about'
+								className={`transition-colors ${pathname === '/about' ? 'text-primary' : 'text-[#6B7280] hover:text-primary'}`}>
+								About us
+							</Link>
+						)}
 
 						{isLoggedIn && user ? (
 							<div className='relative' ref={menuRef}>
 								<button
 									onClick={() => setMenuOpen((v) => !v)}
-									className='w-9 h-9 rounded-full bg-neutral-800 text-white text-sm font-semibold flex items-center justify-center hover:bg-neutral-700 transition-colors'>
+									className='w-9 h-9 rounded-full bg-brand-dark text-white text-sm font-semibold flex items-center justify-center hover:opacity-90 transition-opacity'>
 									{user.initials}
 								</button>
 
 								{menuOpen && (
-									<div className='absolute right-0 top-12 w-56 bg-white rounded-xl shadow-modal border border-neutral-200 py-2 z-50'>
+									<div className='absolute right-0 top-12 w-60 bg-white rounded-xl shadow-modal border border-neutral-200 py-2 z-50'>
 										<div className='px-4 py-3 border-b border-neutral-100'>
-											<p className='text-sm font-semibold text-neutral-900'>{user.name}</p>
+											<p className='text-sm font-bold text-neutral-900'>
+												Hello, {user.firstName ?? user.name}
+											</p>
 											<p className='text-xs text-neutral-500 mt-0.5'>{user.email}</p>
 										</div>
 										{USER_MENU.map((item) => {
 											const ItemIcon = item.icon;
+											const className =
+												'flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors w-full text-left';
+
+											if (item.action === 'logout') {
+												return (
+													<div key={item.label}>
+														{item.dividerBefore && (
+															<div className='my-1 border-t border-neutral-100' />
+														)}
+														<button
+															onClick={() => {
+																setMenuOpen(false);
+																onLogout?.();
+															}}
+															className={className}>
+															<ItemIcon size={16} strokeWidth={1.5} className='shrink-0' />
+															{item.label}
+														</button>
+													</div>
+												);
+											}
+
 											return (
-												<Link
-													key={item.label}
-													href={item.href}
-													onClick={() => setMenuOpen(false)}
-													className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${item.danger ? 'text-red-600 hover:bg-red-50' : 'text-neutral-700 hover:bg-neutral-50'}`}>
-													<ItemIcon size={16} strokeWidth={1.5} className='shrink-0' />
-													{item.label}
-												</Link>
+												<div key={item.label}>
+													{item.dividerBefore && (
+														<div className='my-1 border-t border-neutral-100' />
+													)}
+													<Link
+														href={item.href}
+														onClick={() => setMenuOpen(false)}
+														className={className}>
+														<ItemIcon size={16} strokeWidth={1.5} className='shrink-0' />
+														{item.label}
+													</Link>
+												</div>
 											);
 										})}
 									</div>
 								)}
 							</div>
 						) : (
-							<button
-								onClick={onSignupClick}
-								className='bg-primary hover:bg-primary-hover text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors w-40'>
-								Sign up
-							</button>
+							<div className='relative' ref={getStartedRef}>
+								<button
+									onClick={() => setGetStartedOpen((v) => !v)}
+									className='bg-primary hover:bg-primary-hover text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors w-40'>
+									Sign up
+								</button>
+
+								{getStartedOpen && (
+									<div className='absolute right-0 top-12 w-80 bg-white rounded-2xl shadow-modal border border-neutral-100 p-6 z-50'>
+										<button
+											onClick={() => setGetStartedOpen(false)}
+											aria-label='Close'
+											className='absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 transition-colors'>
+											<X size={18} strokeWidth={1.5} />
+										</button>
+
+										<h3 className='font-georgia text-lg font-bold text-neutral-900 text-center mb-2'>
+											Let&apos;s get you started
+										</h3>
+										<p className='text-sm text-neutral-500 text-center leading-relaxed mb-5'>
+											Create an account or sign in to book apartments and manage your
+											trips.
+										</p>
+
+										<button
+											onClick={() => {
+												setGetStartedOpen(false);
+												onSignupClick?.();
+											}}
+											className='w-full bg-primary hover:bg-primary-hover text-white text-sm font-bold py-3 rounded-xl transition-colors mb-3'>
+											Sign up for free
+										</button>
+										<button
+											onClick={() => {
+												setGetStartedOpen(false);
+												onLoginClick?.();
+											}}
+											className='w-full text-center text-sm font-semibold text-primary hover:text-primary-hover transition-colors'>
+											Sign in
+										</button>
+									</div>
+								)}
+							</div>
 						)}
 					</div>
 
@@ -146,7 +241,7 @@ export default function Navbar({ isLoggedIn = false, user = null, onLoginClick, 
 					</button>
 				</div>
 
-				<div className='md:hidden flex items-center px-6 pb-3 border-t border-neutral-100 pt-2'>
+				<div className={`md:hidden ${variant === 'minimal' ? 'hidden' : 'flex'} items-center px-6 pb-3 border-t border-neutral-100 pt-2`}>
 					{NAV_LINKS.map((link) => {
 						const Icon = link.icon;
 						return (

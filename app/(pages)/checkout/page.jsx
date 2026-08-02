@@ -5,24 +5,27 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/layout/Navbar';
 import Footer from '@/app/components/layout/Footer';
-import ChooseRideModal from '@/app/components/modals/Chooseridemodal';
 import SpecialRequestModal from '@/app/components/modals/Specialrequestmodal';
-import AirportTransferModal from '@/app/components/modals/Airporttransfermodal';
+// --- CAR RIDE / AIRPORT TRANSFER TEMPORARILY REMOVED (cars not available yet) ---
+// Product removed the airport pickup / car ride step from checkout. Cars may return
+// next year — keep the commented code below so it can be restored quickly.
+// import ChooseRideModal from '@/app/components/modals/Chooseridemodal';
+// import AirportTransferModal from '@/app/components/modals/Airporttransfermodal';
 
 export default function CheckoutPage() {
 	const router = useRouter();
-	const [airportOpen, setAirportOpen] = useState(false);
-	const [rideOpen, setRideOpen] = useState(false);
+	// const [airportOpen, setAirportOpen] = useState(false);
+	// const [rideOpen, setRideOpen] = useState(false);
 	const [specialOpen, setSpecialOpen] = useState(false);
-	const [selectedRide, setSelectedRide] = useState(null);
+	// const [selectedRide, setSelectedRide] = useState(null);
 	const [specialNote, setSpecialNote] = useState('');
 
 	const pricePerNight = 70;
 	const nights = 2;
 	const subtotal = pricePerNight * nights;
 	const fees = 20;
-	const rideTotal = selectedRide ? selectedRide.price : 0;
-	const total = subtotal + fees + rideTotal;
+	// const rideTotal = selectedRide ? selectedRide.price : 0;
+	const total = subtotal + fees; // + rideTotal (car ride removed for now)
 	const deposit = Math.round(total * 0.4);
 	const balance = total - deposit;
 
@@ -138,6 +141,8 @@ export default function CheckoutPage() {
 						</div>
 					</div>
 
+					{/* --- AIRPORT TRANSFER / CAR RIDE (temporarily removed — cars not available yet).
+					     Restore this block when the car ride product is ready. ---
 					<div className='p-5 border-b border-neutral-100'>
 						<button
 							onClick={() =>
@@ -190,6 +195,7 @@ export default function CheckoutPage() {
 							</div>
 						)}
 					</div>
+					--- END AIRPORT TRANSFER --- */}
 
 					<div className='p-5 border-b border-neutral-100'>
 						<div className='flex items-center justify-between mb-1'>
@@ -251,8 +257,10 @@ export default function CheckoutPage() {
 					</div>
 
 					<div className='p-5'>
+						{/* Car ride step removed — go straight to confirmation.
+						    Old flow: href='/checkout/add-ride' (airport pickup → review). */}
 						<Link
-							href='/checkout/add-ride'
+							href='/booking-confirmed'
 							className='w-full block text-center bg-primary hover:bg-primary-hover text-white font-semibold py-3.5 rounded-xl text-sm transition-colors'>
 							Confirm and pay
 						</Link>
@@ -262,6 +270,7 @@ export default function CheckoutPage() {
 
 			<Footer />
 
+			{/* --- CAR RIDE MODALS (temporarily removed — restore with the airport transfer block above) ---
 			<AirportTransferModal
 				isOpen={airportOpen}
 				onClose={() => setAirportOpen(false)}
@@ -275,6 +284,7 @@ export default function CheckoutPage() {
 				onClose={() => setRideOpen(false)}
 				onSelectRide={(ride) => setSelectedRide(ride)}
 			/>
+			--- END CAR RIDE MODALS --- */}
 			<SpecialRequestModal
 				isOpen={specialOpen}
 				onClose={() => setSpecialOpen(false)}

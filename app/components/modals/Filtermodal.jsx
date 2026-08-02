@@ -1,33 +1,46 @@
 'use client';
 
 import { useState } from 'react';
+import {
+	Sparkles,
+	CalendarDays,
+	PawPrint,
+	DoorOpen,
+	Wifi,
+	AirVent,
+	UtensilsCrossed,
+	ParkingCircle,
+	Armchair,
+	ChevronDown,
+} from 'lucide-react';
 import Modal from '../modals/Modal';
 
 const TRAVELER_TYPES = ['Solo', 'Family'];
 const TIERS = ['Any', 'Standard', 'Premium', 'Luxury'];
 const BOOKING_OPTIONS = [
-	'Instant book',
-	'Free cancellation',
-	'Allow pets',
-	'Self check-in',
+	{ label: 'Instant book', icon: Sparkles },
+	{ label: 'Free cancellation', icon: CalendarDays },
+	{ label: 'Allow pets', icon: PawPrint },
+	{ label: 'Self check-in', icon: DoorOpen },
 ];
 const AMENITIES = [
-	'Wifi',
-	'Air conditioning',
-	'Kitchen',
-	'Free parking',
-	'Dedicated workspace',
+	{ label: 'Wifi', icon: Wifi },
+	{ label: 'Air conditioning', icon: AirVent },
+	{ label: 'Kitchen', icon: UtensilsCrossed },
+	{ label: 'Free parking', icon: ParkingCircle },
+	{ label: 'Dedicated workspace', icon: Armchair },
 ];
 
-function ToggleChip({ label, active, onToggle }) {
+function ToggleChip({ label, icon: Icon, active, onToggle }) {
 	return (
 		<button
 			onClick={onToggle}
-			className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
+			className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
 				active ?
 					'border-neutral-900 bg-white text-neutral-900'
 				:	'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
 			}`}>
+			{Icon && <Icon size={16} strokeWidth={1.5} className='shrink-0' />}
 			{label}
 		</button>
 	);
@@ -75,7 +88,7 @@ export default function FilterModal({ isOpen, onClose, onApply }) {
 			onClose={onClose}
 			title='Filters'
 			maxWidth='max-w-2xl'>
-			<div className='space-y-8 max-h-[60vh] overflow-y-auto pr-1'>
+			<div className='space-y-8 max-h-[60vh] overflow-y-auto no-scrollbar'>
 				<section>
 					<h3 className='text-base font-semibold text-neutral-900 mb-3'>
 						Traveler type
@@ -117,10 +130,11 @@ export default function FilterModal({ isOpen, onClose, onApply }) {
 					<div className='flex gap-2 flex-wrap'>
 						{BOOKING_OPTIONS.map((opt) => (
 							<ToggleChip
-								key={opt}
-								label={opt}
-								active={bookingOptions.includes(opt)}
-								onToggle={() => toggleBookingOption(opt)}
+								key={opt.label}
+								label={opt.label}
+									icon={opt.icon}
+								active={bookingOptions.includes(opt.label)}
+								onToggle={() => toggleBookingOption(opt.label)}
 							/>
 						))}
 					</div>
@@ -133,10 +147,11 @@ export default function FilterModal({ isOpen, onClose, onApply }) {
 					<div className='flex gap-2 flex-wrap'>
 						{AMENITIES.map((amenity) => (
 							<ToggleChip
-								key={amenity}
-								label={amenity}
-								active={amenities.includes(amenity)}
-								onToggle={() => toggleAmenity(amenity)}
+								key={amenity.label}
+								label={amenity.label}
+									icon={amenity.icon}
+								active={amenities.includes(amenity.label)}
+								onToggle={() => toggleAmenity(amenity.label)}
 							/>
 						))}
 					</div>
