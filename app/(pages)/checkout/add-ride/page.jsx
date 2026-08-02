@@ -1,5 +1,10 @@
 'use client';
 
+// ⚠️ TEMPORARILY OUT OF FLOW — Airport pickup / car ride step.
+// Cars are not available yet (may return next year). This page is no longer linked
+// from checkout (Booking details "Confirm and pay" now goes straight to
+// /booking-confirmed). Kept intact so the car ride flow can be restored later.
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

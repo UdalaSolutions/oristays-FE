@@ -47,3 +47,12 @@ body {
 h1 {
 	font-family: var(--font-georgia), serif;
 }
+
+/* Hide scrollbar while keeping scroll functionality */
+@utility no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}

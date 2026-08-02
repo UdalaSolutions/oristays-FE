@@ -1,5 +1,9 @@
 'use client';
 
+// ⚠️ TEMPORARILY OUT OF FLOW — Review & Pay step (included airport pickup).
+// Cars are not available yet (may return next year). This page is no longer linked
+// from checkout. Kept intact so the car ride flow can be restored later.
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/layout/Navbar';
