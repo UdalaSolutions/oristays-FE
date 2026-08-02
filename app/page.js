@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useAuth } from './lib/useAuth';
 import { StatsBar } from './components/home/StatsBar';
 import { ApartmentSection } from './components/home/ApartmentSection';
 import { FAQSection } from './components/home/FAQSection';
@@ -29,14 +30,22 @@ const MOCK_APARTMENTS = Array.from({ length: 4 }, (_, i) => ({
 const RECENT_SEARCHES = [{ name: 'Surulere', meta: 'March 18 - 20 · 1 guest' }];
 
 export default function HomePage() {
+	const { isLoggedIn, user, login, logout } = useAuth();
 	const [loginOpen, setLoginOpen] = useState(false);
+
+	function handleLoginSuccess(email) {
+		login(email);
+		setLoginOpen(false);
+	}
 
 	return (
 		<>
 			<Navbar
-				isLoggedIn={false}
+				isLoggedIn={isLoggedIn}
+				user={user}
 				onSignupClick={() => setLoginOpen(true)}
 				onLoginClick={() => setLoginOpen(true)}
+				onLogout={logout}
 			/>
 
 			<main>
@@ -104,6 +113,7 @@ export default function HomePage() {
 			<LoginModal
 				isOpen={loginOpen}
 				onClose={() => setLoginOpen(false)}
+				onSuccess={handleLoginSuccess}
 			/>
 		</>
 	);
